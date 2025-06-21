@@ -1,0 +1,42 @@
+[
+  {
+    "ID": 0,
+    "Title": "The Go Programming Language"
+  },
+  {
+    "ID": 1,
+    "Title": "Clean Code"
+  },
+  {
+    "ID": 2,
+    "Title": "Introduction to Algorithms"
+  },
+  {
+    "ID": 3,
+    "Title": "The Pragmatic Programmer"
+  },
+  {
+    "ID": 4,
+    "Title": "Design Patterns"
+  },
+  {
+    "ID": 5,
+    "Title": "Effective Java"
+  },
+  {
+    "ID": 6,
+    "Title": "Refactoring"
+  },
+  {
+    "ID": 7,
+    "Title": "Structure and Interpretation of Computer Programs"
+  },
+  {
+    "ID": 8,
+    "Title": "Domain-Driven Design"
+  },
+  {
+    "ID": 9,
+    "Title": "Code Complete"
+  }
+]

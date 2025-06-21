@@ -1,0 +1,178 @@
+{
+  "consumer": {
+    "name": "BooksAPIConsumer"
+  },
+  "interactions": [
+    {
+      "description": "A request for Book 5",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "A book with ID 5 does not exist"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/books/5"
+      },
+      "response": {
+        "body": {
+          "content": "AQ==",
+          "contentType": "*/*",
+          "encoded": "base64"
+        },
+        "headers": {
+          "Content-Type": [
+            "application/octet-stream"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "contentType",
+                  "value": "application/octet-stream"
+                }
+              ]
+            }
+          }
+        },
+        "status": 404
+      },
+      "transport": "http",
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "A request for Book 5",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "A book with ID 5 exists"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/books/5"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "ID": 5,
+            "Title": "Cool title"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "status": 200
+      },
+      "transport": "http",
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "A request for list of books",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "list of books is not empty"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/books"
+      },
+      "response": {
+        "body": {
+          "content": [
+            {
+              "ID": 5,
+              "Title": "Effective Java"
+            },
+            {
+              "ID": 6,
+              "Title": "Refactoring"
+            }
+          ],
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "status": 200
+      },
+      "transport": "http",
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "Delete request for Book 5",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "A book with ID 5 exists"
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "path": "/books/5",
+        "query": {
+          "q": [
+            "qqq"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "content": "cA==",
+          "contentType": "*/*",
+          "encoded": "base64"
+        },
+        "headers": {
+          "Content-Type": [
+            "application/octet-stream"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "contentType",
+                  "value": "application/octet-stream"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "transport": "http",
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pact-go": {
+      "version": "2.4.1"
+    },
+    "pactRust": {
+      "ffi": "0.4.27",
+      "mockserver": "1.2.11",
+      "models": "1.2.8"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "BooksAPI"
+  }
+}

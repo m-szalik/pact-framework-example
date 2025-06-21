@@ -1,0 +1,34 @@
+{
+  "consumer": {
+    "name": "BooksAPIConsumer"
+  },
+  "interactions": [
+    {
+      "description": "A request for Book 5",
+      "providerState": "A book with ID 5 does not exist",
+      "request": {
+        "method": "GET",
+        "path": "/books/5"
+      },
+      "response": {
+        "status": 404
+      }
+    }
+  ],
+  "metadata": {
+    "pact-go": {
+      "version": "2.4.1"
+    },
+    "pactRust": {
+      "ffi": "0.4.27",
+      "mockserver": "1.2.11",
+      "models": "1.2.8"
+    },
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  },
+  "provider": {
+    "name": "BooksAPIProvider"
+  }
+}
