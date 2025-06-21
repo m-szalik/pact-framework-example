@@ -1,0 +1,67 @@
+{
+  "consumer": {
+    "name": "Backoffice"
+  },
+  "interactions": [
+    {
+      "description": "",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "create new book"
+        }
+      ],
+      "request": {
+        "body": {
+          "content": {
+            "ID": 11,
+            "Title": "New book"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "method": "POST",
+        "path": "/books"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "ID": 11,
+            "Title": "New book"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "status": 201
+      },
+      "transport": "http",
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pact-go": {
+      "version": "2.4.1"
+    },
+    "pactRust": {
+      "ffi": "0.4.27",
+      "mockserver": "1.2.11",
+      "models": "1.2.8"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "BooksAPI"
+  }
+}

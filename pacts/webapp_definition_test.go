@@ -1,8 +1,6 @@
 package pacts
 
 import (
-	"bytes"
-	"fmt"
 	"github.com/pact-foundation/pact-go/v2/consumer"
 	"github.com/pact-foundation/pact-go/v2/matchers"
 	"github.com/stretchr/testify/assert"
@@ -10,9 +8,9 @@ import (
 	"testing"
 )
 
-func TestDefineBookPact(t *testing.T) {
+func TestWebappDefineBookPact(t *testing.T) {
 	mockProvider, err := consumer.NewV4Pact(consumer.MockHTTPProviderConfig{
-		Consumer: "BooksAPIConsumer",
+		Consumer: "Webapp",
 		Provider: "BooksAPI",
 	})
 	assert.NoError(t, err)
@@ -28,7 +26,7 @@ func TestDefineBookPact(t *testing.T) {
 				builder.JSONBody([]Book{{ID: 5, Title: "Effective Java"}, {ID: 6, Title: "Refactoring"}})
 			})
 		err := mockProvider.ExecuteTest(t, func(config consumer.MockServerConfig) error {
-			resp, err := request(config, "GET", "/books")
+			resp, err := request(t, config, "GET", "/books", nil)
 			assert.Equal(t, http.StatusOK, resp.StatusCode)
 			assert.NoError(t, err)
 			return nil
@@ -44,14 +42,13 @@ func TestDefineBookPact(t *testing.T) {
 			WithRequest("GET", "/books/5").
 			WillRespondWith(200, func(builder *consumer.V4ResponseBuilder) {
 				builder.Header("Content-Type", matchers.S("application/json"))
-				builder.JSONBody(Book{ID: 5, Title: "Cool title"})
+				builder.JSONBody(Book{ID: 5, Title: "Effective Java"})
 			})
 		err := mockProvider.ExecuteTest(t, func(config consumer.MockServerConfig) error {
-			resp, err := request(config, "GET", "/books/5")
+			resp, err := request(t, config, "GET", "/books/5", nil)
 			assert.Equal(t, http.StatusOK, resp.StatusCode)
 			assert.NoError(t, err)
 			return nil
-			0
 		})
 		assert.NoError(t, err)
 	})
@@ -65,7 +62,7 @@ func TestDefineBookPact(t *testing.T) {
 			WillRespondWith(404, func(builder *consumer.V4ResponseBuilder) {
 			})
 		err := mockProvider.ExecuteTest(t, func(config consumer.MockServerConfig) error {
-			resp, err := request(config, "GET", "/books/99")
+			resp, err := request(t, config, "GET", "/books/99", nil)
 			assert.Equal(t, http.StatusNotFound, resp.StatusCode)
 			assert.NoError(t, err)
 			return nil
@@ -84,23 +81,11 @@ func TestDefineBookPact(t *testing.T) {
 			WillRespondWith(200, func(builder *consumer.V4ResponseBuilder) {
 			})
 		err := mockProvider.ExecuteTest(t, func(config consumer.MockServerConfig) error {
-			_, err := request(config, http.MethodDelete, "/books/5")
+			_, err := request(t, config, http.MethodDelete, "/books/5", nil)
 			assert.NoError(t, err)
 			return nil
 		})
 		assert.NoError(t, err)
 	})
 
-}
-
-func request(config consumer.MockServerConfig, method, url string) (*http.Response, error) {
-	req, err := http.NewRequest(method, fmt.Sprintf("http://%s:%d%s", config.Host, config.Port, url), bytes.NewBuffer([]byte{}))
-	if err != nil {
-		return nil, err
-	}
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
 }
