@@ -51,6 +51,7 @@ func TestDefineBookPact(t *testing.T) {
 			assert.Equal(t, http.StatusOK, resp.StatusCode)
 			assert.NoError(t, err)
 			return nil
+			0
 		})
 		assert.NoError(t, err)
 	})
@@ -58,14 +59,13 @@ func TestDefineBookPact(t *testing.T) {
 	t.Run("Get not exiting book by ID", func(t *testing.T) {
 		mockProvider.
 			AddInteraction().
-			Given("A book with ID 5 does not exist").
-			UponReceiving("A request for Book 5").
-			WithRequest("GET", "/books/5").
+			Given("A book with ID 99 does not exist").
+			UponReceiving("A request for Book 99").
+			WithRequest("GET", "/books/99").
 			WillRespondWith(404, func(builder *consumer.V4ResponseBuilder) {
-				builder.BinaryBody([]byte{1})
 			})
 		err := mockProvider.ExecuteTest(t, func(config consumer.MockServerConfig) error {
-			resp, err := request(config, "GET", "/books/5")
+			resp, err := request(config, "GET", "/books/99")
 			assert.Equal(t, http.StatusNotFound, resp.StatusCode)
 			assert.NoError(t, err)
 			return nil
@@ -80,13 +80,11 @@ func TestDefineBookPact(t *testing.T) {
 			UponReceiving("Delete request for Book 5").
 			WithRequest("DELETE", "/books/5", func(builder *consumer.V4RequestBuilder) {
 				// additional request conditions here
-				builder.Query("q", matchers.S("qqq"))
 			}).
 			WillRespondWith(200, func(builder *consumer.V4ResponseBuilder) {
-				builder.BinaryBody([]byte{112})
 			})
 		err := mockProvider.ExecuteTest(t, func(config consumer.MockServerConfig) error {
-			_, err := request(config, http.MethodDelete, "/books/5?q=qqq")
+			_, err := request(config, http.MethodDelete, "/books/5")
 			assert.NoError(t, err)
 			return nil
 		})

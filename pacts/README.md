@@ -15,5 +15,6 @@ pact-broker publish --broker-base-url=http://localhost:9292 --consumer-app-versi
 ```
 
 ```shell
-pact-broker publish --broker-base-url=http://localhost:9292 --consumer-app-version=${git rev-parse --short HEAD} ./pacts
+export VER=`git rev-parse --short HEAD`
+pact-broker publish ./pacts/ --broker-base-url=http://localhost:9292 --consumer-app-version=${VER}  -t "develop"
 ```

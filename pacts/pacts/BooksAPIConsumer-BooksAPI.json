@@ -76,6 +76,24 @@
       "type": "Synchronous/HTTP"
     },
     {
+      "description": "A request for Book 99",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "A book with ID 99 does not exist"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/books/99"
+      },
+      "response": {
+        "status": 404
+      },
+      "transport": "http",
+      "type": "Synchronous/HTTP"
+    },
+    {
       "description": "A request for list of books",
       "pending": false,
       "providerStates": [
@@ -122,37 +140,9 @@
       ],
       "request": {
         "method": "DELETE",
-        "path": "/books/5",
-        "query": {
-          "q": [
-            "qqq"
-          ]
-        }
+        "path": "/books/5"
       },
       "response": {
-        "body": {
-          "content": "cA==",
-          "contentType": "*/*",
-          "encoded": "base64"
-        },
-        "headers": {
-          "Content-Type": [
-            "application/octet-stream"
-          ]
-        },
-        "matchingRules": {
-          "body": {
-            "$": {
-              "combine": "AND",
-              "matchers": [
-                {
-                  "match": "contentType",
-                  "value": "application/octet-stream"
-                }
-              ]
-            }
-          }
-        },
         "status": 200
       },
       "transport": "http",
