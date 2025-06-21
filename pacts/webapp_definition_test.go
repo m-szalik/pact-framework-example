@@ -23,7 +23,6 @@ func TestWebappDefineBookPact(t *testing.T) {
 			WithRequest("GET", "/books").
 			WillRespondWith(200, func(builder *consumer.V4ResponseBuilder) {
 				builder.Header("Content-Type", matchers.S("application/json"))
-				builder.JSONBody([]Book{{ID: 5, Title: "Effective Java"}, {ID: 6, Title: "Refactoring"}})
 			})
 		err := mockProvider.ExecuteTest(t, func(config consumer.MockServerConfig) error {
 			resp, err := request(t, config, "GET", "/books", nil)

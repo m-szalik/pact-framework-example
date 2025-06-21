@@ -12,11 +12,9 @@ import (
 )
 
 func TestServerHttp(t *testing.T) {
-	s := server{
-		books: prepareData(),
-	}
+	s := newServer()
 	handler := s.httpHandler()
-	t.Run("list of books", func(t *testing.T) {
+	t.Run("getList of books", func(t *testing.T) {
 		request := httptest.NewRequest("GET", "/books", nil)
 		writer := httptest.NewRecorder()
 		handler.ServeHTTP(writer, request)

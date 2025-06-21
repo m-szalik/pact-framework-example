@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/m-szalik/pact-framework-example/go-api-server/model"
+	"io"
 	"log/slog"
 	"net/http"
 	"os/signal"
@@ -18,12 +19,12 @@ type server struct {
 	books []model.ServerBook
 }
 
-func (s *server) list(writer http.ResponseWriter, _ *http.Request) {
-	slog.Info("http request 'list'")
+func (s *server) getList(writer http.ResponseWriter, _ *http.Request) {
+	slog.Info("http request 'get list'")
 	handleResponse(s.books, http.StatusOK, writer)
 }
 
-func (s *server) byID(writer http.ResponseWriter, request *http.Request) {
+func (s *server) getByID(writer http.ResponseWriter, request *http.Request) {
 	paramID, ok := mux.Vars(request)["id"]
 	slog.Info(fmt.Sprintf("http request 'byId' with id=%s", paramID))
 	if !ok {
@@ -41,7 +42,11 @@ func (s *server) byID(writer http.ResponseWriter, request *http.Request) {
 			return
 		}
 	}
-	handleResponse(nil, http.StatusNoContent, writer)
+	handleResponse(nil, http.StatusNotFound, writer)
+}
+
+func (s *server) deleteById(writer http.ResponseWriter, request *http.Request) {
+	// TODO implement, Pact does not check if the logic is ok but if the request and response match expectations
 }
 
 func handleResponse(output any, httpStatus int, writer http.ResponseWriter) {
@@ -59,23 +64,21 @@ func handleResponse(output any, httpStatus int, writer http.ResponseWriter) {
 			_, _ = writer.Write([]byte(err.Error()))
 			return
 		}
+		writer.Header().Set("Content-Type", "application/json")
 		_, _ = writer.Write(buff)
 	}
 }
 
 func (s *server) httpHandler() http.Handler {
 	router := mux.NewRouter()
-	router.Path("/books").HandlerFunc(s.list)
-	router.Path("/books/{id}").HandlerFunc(s.byID)
+	router.Methods("GET").Path("/books").HandlerFunc(s.getList)
+	router.Methods("POST").Path("/books").HandlerFunc(s.createBook)
+	router.Methods("GET").Path("/books/{id}").HandlerFunc(s.getByID)
+	router.Methods("DELETE").Path("/books/{id}").HandlerFunc(s.deleteById)
 	return router
 }
 
-func main() {
-	ctx, _ := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT)
-	s := server{
-		books: prepareData(),
-	}
-
+func (s *server) serverStart(ctx context.Context) {
 	listenOn := ":8080"
 	httpServer := &http.Server{
 		Addr:    listenOn,
@@ -93,17 +96,25 @@ func main() {
 	}
 }
 
-func prepareData() []model.ServerBook {
-	return []model.ServerBook{
-		{ID: 0, Title: "The Go Programming Language"},
-		{ID: 1, Title: "Clean Code"},
-		{ID: 2, Title: "Introduction to Algorithms"},
-		{ID: 3, Title: "The Pragmatic Programmer"},
-		{ID: 4, Title: "Design Patterns"},
-		{ID: 5, Title: "Effective Java"},
-		{ID: 6, Title: "Refactoring"},
-		{ID: 7, Title: "Structure and Interpretation of Computer Programs"},
-		{ID: 8, Title: "Domain-Driven Design"},
-		{ID: 9, Title: "Code Complete"},
+func (s *server) createBook(writer http.ResponseWriter, request *http.Request) {
+	buff, _ := io.ReadAll(request.Body)
+	writer.Header().Add("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusCreated)
+	_, _ = writer.Write(buff)
+}
+
+func main() {
+	ctx, _ := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT)
+	s := newServer()
+	s.serverStart(ctx)
+}
+
+func newServer() *server {
+	return &server{
+		books: []model.ServerBook{
+			{ID: 0, Title: "The Go Programming Language"},
+			{ID: 1, Title: "Clean Code"},
+			{ID: 5, Title: "Effective Java"},
+		},
 	}
 }
