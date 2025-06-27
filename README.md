@@ -14,16 +14,36 @@
 
 # Why Pact
 1. Responsive community.
-2. Multiple language support
-3. Easy to use
-4. Tools
-5. Unfortunately it is consumer-driven
+2. Multiple language support.
+3. Easy to use.
+4. Supports Rest, grpc and messages.
+5. Tools.
+6. Unfortunately it is consumer-driven.
 
 
 ## Example
 1. Go Consumer (Client)
 2. Go provider (Server)
 3. Pacts and Pact broker
+
+## Tools:
+### Broker
+
+### Pact-stub-service
+```shell
+pact-stub-service --port=8080 pacts/*.json
+```
+```shell
+curl -sv http://localhost:8080/books |jq
+```
+Alternative: https://github.com/pact-foundation/pact-stub-server
+or
+```shell
+docker run --rm -it -v "$(pwd)/pacts:/pacts" -p 8080:8080 pactfoundation/pact-stub-server --dir /pacts --port=8080
+```
+
+### pact-provider-verifier
+
 
 # Benefits of contract testing
 1. You can organize your code that all contract are in a separated repo, so spacial approval policy can be applied.
