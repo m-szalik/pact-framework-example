@@ -3,9 +3,11 @@ package client
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/m-szalik/pact-framework-example/go-api-client/model"
 	"io"
 	"net/http"
+
+	"github.com/m-szalik/goutils"
+	"github.com/m-szalik/pact-framework-example/go-api-client/model"
 )
 
 // hTTPBookClient implements BookClient using HTTP
@@ -36,7 +38,7 @@ func (c *hTTPBookClient) GetBooks() ([]model.ClientBook, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer goutils.CloseQuietly(resp.Body)
 
 	var books []model.ClientBook
 	if err := json.NewDecoder(resp.Body).Decode(&books); err != nil {
@@ -50,8 +52,7 @@ func (c *hTTPBookClient) GetBookByID(id int) (*model.ClientBook, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
-
+	defer goutils.CloseQuietly(resp.Body)
 	if resp.StatusCode == http.StatusNotFound {
 		return nil, fmt.Errorf("book with ID %d not found", id)
 	}

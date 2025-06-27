@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/m-szalik/pact-framework-example/go-api-client/client"
 )
 

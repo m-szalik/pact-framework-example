@@ -1,6 +1,7 @@
 module github.com/m-szalik/pact-framework-example/go-api-client
 
 require (
+	github.com/m-szalik/goutils v0.0.0-20250612215849-783bcb4c8fcd
 	github.com/pact-foundation/pact-go/v2 v2.4.1
 	github.com/stretchr/testify v1.10.0
 )
