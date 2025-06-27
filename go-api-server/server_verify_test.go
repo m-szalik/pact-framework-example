@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
-	"github.com/pact-foundation/pact-go/v2/provider"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
+
+	"github.com/pact-foundation/pact-go/v2/provider"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestVerifyServer(t *testing.T) {
@@ -24,18 +25,18 @@ func TestVerifyServer(t *testing.T) {
 
 	err := verifier.VerifyProvider(t, provider.VerifyRequest{
 		ProviderBaseURL:    "http://127.0.0.1:8080",
-		Provider:           "BooksAPI",
+		Provider:           "BooksAPIProvider",
 		FailIfNoPactsFound: true,
 		ProviderVersion:    "latestVersion",
 		BrokerURL:          "http://localhost:9292",
-		//ConsumerVersionSelectors: []provider.Selector{
+		// ConsumerVersionSelectors: []provider.Selector{
 		//	&provider.ConsumerVersionSelector{
 		//		Tag: "develop",
 		//	},
 		//	&provider.ConsumerVersionSelector{
 		//		Tag: "develop",
 		//	},
-		//},
+		// },
 		PublishVerificationResults: true,
 		RequestFilter:              f,
 	})
